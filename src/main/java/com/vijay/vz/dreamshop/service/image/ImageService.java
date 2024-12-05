@@ -1,7 +1,7 @@
 package com.vijay.vz.dreamshop.service.image;
 
 import com.vijay.vz.dreamshop.dto.ImageDto;
-import com.vijay.vz.dreamshop.exceptions.ResourceNotFound;
+import com.vijay.vz.dreamshop.exceptions.ResourceNotFoundException;
 import com.vijay.vz.dreamshop.model.Image;
 import com.vijay.vz.dreamshop.model.Product;
 import com.vijay.vz.dreamshop.repository.ImageRepository;
@@ -26,12 +26,12 @@ public class ImageService implements IImageService{
     @Override
     public Image getImageById(Long id) {
         return imageRepository.findById(id)
-                .orElseThrow( () -> new ResourceNotFound("No image found with id "+id));
+                .orElseThrow( () -> new ResourceNotFoundException("No image found with id "+id));
     }
 
     @Override
     public void deleteImageById(Long id) {
-         imageRepository.findById(id).ifPresentOrElse(imageRepository::delete, () -> new ResourceNotFound("No image found with id "+id));
+         imageRepository.findById(id).ifPresentOrElse(imageRepository::delete, () -> new ResourceNotFoundException("No image found with id "+id));
     }
 
     @Override
