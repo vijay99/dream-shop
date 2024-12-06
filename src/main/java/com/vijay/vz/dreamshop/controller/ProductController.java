@@ -1,5 +1,6 @@
 package com.vijay.vz.dreamshop.controller;
 
+import com.vijay.vz.dreamshop.dto.ProductDto;
 import com.vijay.vz.dreamshop.exceptions.ResourceNotFoundException;
 import com.vijay.vz.dreamshop.model.Product;
 import com.vijay.vz.dreamshop.request.AddProductRequest;
@@ -22,6 +23,13 @@ import static org.springframework.http.HttpStatus.NOT_FOUND;
 public class ProductController {
 
     private final IProductService productService;
+
+
+    @GetMapping("product/all")
+    public ResponseEntity<ApiResponse> getAllProducts() {
+        List<ProductDto> products = productService.getAllProducts();
+        return ResponseEntity.ok(new ApiResponse("Success",products));
+    }
 
     @GetMapping("/product/{id}/getById")
     public ResponseEntity<ApiResponse> getProductById(@PathVariable Long id) {
