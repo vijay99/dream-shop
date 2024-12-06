@@ -1,6 +1,7 @@
 package com.vijay.vz.dreamshop.service.product;
 
 import com.vijay.vz.dreamshop.exceptions.ProductNotFoundException;
+import com.vijay.vz.dreamshop.exceptions.ResourceNotFoundException;
 import com.vijay.vz.dreamshop.model.Category;
 import com.vijay.vz.dreamshop.model.Product;
 import com.vijay.vz.dreamshop.repository.CategoryRepository;
@@ -49,7 +50,7 @@ public class ProductService implements IProductService{
     @Override
     public Product getProductById(Long id) {
         return productRepository.findById(id)
-                .orElseThrow(() ->new ProductNotFoundException("Product not found"));
+                .orElseThrow(() ->new ResourceNotFoundException("Product not found"));
     }
 
     @Override
@@ -64,7 +65,7 @@ public class ProductService implements IProductService{
         return productRepository.findById(productId)
                 .map( existingProduct -> updateExistingProduct(existingProduct,request))
                 .map(productRepository::save)
-                .orElseThrow(() ->new ProductNotFoundException("Product not found"));
+                .orElseThrow(() ->new ResourceNotFoundException("Product not found"));
 
     }
     private Product updateExistingProduct(Product existingProduct,ProductUpdateRequest request){
