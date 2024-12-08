@@ -1,5 +1,6 @@
 package com.vijay.vz.dreamshop.service.user;
 
+import com.vijay.vz.dreamshop.dto.UserDto;
 import com.vijay.vz.dreamshop.model.User;
 import com.vijay.vz.dreamshop.request.CreateUserRequest;
 import com.vijay.vz.dreamshop.request.UserUpdateRequest;

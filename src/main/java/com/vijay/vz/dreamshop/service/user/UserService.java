@@ -1,5 +1,6 @@
 package com.vijay.vz.dreamshop.service.user;
 
+import com.vijay.vz.dreamshop.dto.UserDto;
 import com.vijay.vz.dreamshop.exceptions.AlreadyExistsException;
 import com.vijay.vz.dreamshop.exceptions.ResourceNotFoundException;
 import com.vijay.vz.dreamshop.model.User;
@@ -26,7 +27,7 @@ public class UserService implements IUserService {
 
     @Override
     public User createUser(CreateUserRequest request) {
-        return  Optional.of(request)
+        return Optional.of(request)
                 .filter(user -> !userRepository.existsByEmail(request.getEmail()))
                 .map(req -> {
                     User user = new User();
@@ -34,13 +35,13 @@ public class UserService implements IUserService {
                     user.setPassword(request.getPassword());
                     user.setFirstName(request.getFirstName());
                     user.setLastName(request.getLastName());
-                    return  userRepository.save(user);
-                }) .orElseThrow(() -> new AlreadyExistsException("Oops!" +request.getEmail() +" already exists!"));
+                    return userRepository.save(user);
+                }).orElseThrow(() -> new AlreadyExistsException("Oops!" + request.getEmail() + " already exists!"));
     }
 
     @Override
     public User updateUser(UserUpdateRequest request, Long userId) {
-        return  userRepository.findById(userId).map(existingUser ->{
+        return userRepository.findById(userId).map(existingUser -> {
             existingUser.setFirstName(request.getFirstName());
             existingUser.setLastName(request.getLastName());
             return userRepository.save(existingUser);
@@ -50,7 +51,7 @@ public class UserService implements IUserService {
 
     @Override
     public void deleteUser(Long userId) {
-        userRepository.findById(userId).ifPresentOrElse(userRepository :: delete, () ->{
+        userRepository.findById(userId).ifPresentOrElse(userRepository::delete, () -> {
             throw new ResourceNotFoundException("User not found!");
         });
     }
@@ -59,3 +60,4 @@ public class UserService implements IUserService {
     public UserDto convertUserToDto(User user) {
         return modelMapper.map(user, UserDto.class);
     }
+}
