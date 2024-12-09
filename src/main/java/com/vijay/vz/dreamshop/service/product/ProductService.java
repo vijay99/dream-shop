@@ -2,6 +2,7 @@ package com.vijay.vz.dreamshop.service.product;
 
 import com.vijay.vz.dreamshop.dto.ImageDto;
 import com.vijay.vz.dreamshop.dto.ProductDto;
+import com.vijay.vz.dreamshop.exceptions.AlreadyExistsException;
 import com.vijay.vz.dreamshop.exceptions.ProductNotFoundException;
 import com.vijay.vz.dreamshop.exceptions.ResourceNotFoundException;
 import com.vijay.vz.dreamshop.model.Category;
@@ -33,6 +34,10 @@ public class ProductService implements IProductService{
         //Check if the category is found in db.If yes,set it as new product category.
         //If no, then save it as a new category,then set as the new product category.
 
+        if(productExists(request.getName(),request.getBrand())){
+            throw new AlreadyExistsException("product with name "+request.getName()+"and brand "+request.getBrand()+"already exists,you may update this product instead.");
+        }
+
         Category category = Optional.ofNullable(categoryRepository.findByName(request.getCategory().getName()))
                 .orElseGet( () -> {
                     Category newCategory = new Category(request.getCategory().getName());
@@ -40,6 +45,10 @@ public class ProductService implements IProductService{
                 });
                 request.setCategory(category);
                 return productRepository.save(createProduct(request,category));
+    }
+
+    private boolean productExists(String name,String brand){
+        return productRepository.existsByNameAndBrand(name,brand);
     }
 
     private Product createProduct(AddProductRequest request, Category category){

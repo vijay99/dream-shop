@@ -1,6 +1,7 @@
 package com.vijay.vz.dreamshop.controller;
 
 import com.vijay.vz.dreamshop.dto.ProductDto;
+import com.vijay.vz.dreamshop.exceptions.AlreadyExistsException;
 import com.vijay.vz.dreamshop.exceptions.ResourceNotFoundException;
 import com.vijay.vz.dreamshop.model.Product;
 import com.vijay.vz.dreamshop.request.AddProductRequest;
@@ -14,8 +15,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
-import static org.springframework.http.HttpStatus.NOT_FOUND;
+import static org.springframework.http.HttpStatus.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -49,8 +49,8 @@ public class ProductController {
             Product product = productService.addProduct(theProduct);
             ProductDto productDto = productService.convertToDto(product);
             return ResponseEntity.ok(new ApiResponse("Success", productDto));
-        } catch (Exception e) {
-            return ResponseEntity.status(INTERNAL_SERVER_ERROR).body(new ApiResponse(e.getMessage(), null));
+        } catch (AlreadyExistsException e) {
+            return ResponseEntity.status(CONFLICT).body(new ApiResponse(e.getMessage(), null));
         }
     }
 
