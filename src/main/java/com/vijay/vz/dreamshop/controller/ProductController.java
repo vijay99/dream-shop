@@ -11,6 +11,8 @@ import com.vijay.vz.dreamshop.service.product.IProductService;
 import com.vijay.vz.dreamshop.service.product.ProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -20,6 +22,7 @@ import static org.springframework.http.HttpStatus.*;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("${api/prefix}/products")
+@EnableMethodSecurity(prePostEnabled = true)
 public class ProductController {
 
     private final IProductService productService;
@@ -43,6 +46,7 @@ public class ProductController {
         }
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping("product/add")
     public ResponseEntity<ApiResponse> addProduct(@RequestBody AddProductRequest theProduct) {
         try {
@@ -53,7 +57,7 @@ public class ProductController {
             return ResponseEntity.status(CONFLICT).body(new ApiResponse(e.getMessage(), null));
         }
     }
-
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping("product/{id}/update")
     public ResponseEntity<ApiResponse> updateProduct(@PathVariable Long id, @RequestBody ProductUpdateRequest request) {
         try {
@@ -64,7 +68,7 @@ public class ProductController {
             return ResponseEntity.status(NOT_FOUND).body(new ApiResponse(e.getMessage(), null));
         }
     }
-
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @DeleteMapping("product/{id}/delete")
     public ResponseEntity<ApiResponse> deleteProduct(@PathVariable Long id) {
         try {
