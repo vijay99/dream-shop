@@ -1,14 +1,19 @@
 package com.vijay.vz.dreamshop.controller;
 
 import com.vijay.vz.dreamshop.exceptions.ResourceNotFoundException;
+import com.vijay.vz.dreamshop.model.Cart;
+import com.vijay.vz.dreamshop.model.User;
 import com.vijay.vz.dreamshop.response.ApiResponse;
 import com.vijay.vz.dreamshop.service.cart.ICartItemService;
 import com.vijay.vz.dreamshop.service.cart.ICartService;
+import com.vijay.vz.dreamshop.service.user.UserService;
+import io.jsonwebtoken.JwtException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import static org.springframework.http.HttpStatus.NOT_FOUND;
+import static org.springframework.http.HttpStatus.UNAUTHORIZED;
 
 @RestController
 @RequestMapping("${api.prefix}/cartItems")
@@ -17,6 +22,7 @@ public class CartItemController {
 
     private final ICartItemService cartItemService;
     private final ICartService cartService;
+    private final UserService userService;
 
 
     @PostMapping("/item/add")
@@ -24,13 +30,15 @@ public class CartItemController {
                                                      @RequestParam Long productId,
                                                      @RequestParam Integer quantity) {
         try {
-            if (cartId == null) {
-                cartId= cartService.initializeNewCart();
-            }
+            User user = userService.getAuthenticatedUser();
+            cartService.initializeNewCart();
+            // Cart cart= cartService.initializeNewCart();
             cartItemService.addItemToCart(cartId, productId, quantity);
             return ResponseEntity.ok(new ApiResponse("Add Item Success", null));
         } catch (ResourceNotFoundException e) {
             return ResponseEntity.status(NOT_FOUND).body(new ApiResponse(e.getMessage(), null));
+        }catch (JwtException e){
+            return ResponseEntity.status(UNAUTHORIZED).body(new ApiResponse(e.getMessage(),null));
         }
     }
 
