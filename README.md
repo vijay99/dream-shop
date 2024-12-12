@@ -1,2 +1,3 @@
 ## Database schema
-![image](https://github.com/user-attachments/assets/23a4f21f-d4ed-47f5-9dfe-0e352d7ffc16)
+
+![image](https://github.com/user-attachments/assets/dfd74fb6-c22a-4ce6-8ec0-585f04c8f2cd)
