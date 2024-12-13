@@ -16,7 +16,7 @@ import static org.springframework.http.HttpStatus.*;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("${api/prefix}/categories")
+@RequestMapping("${api.prefix}/categories")
 public class CategoryController {
 
     private final ICategoryService categoryService;
@@ -42,7 +42,7 @@ public class CategoryController {
         }
     }
 
-    @GetMapping("/category/{categoryId/get")
+    @GetMapping("/category/{categoryId}/get")
     public ResponseEntity<ApiResponse> getCategoryById(@PathVariable Long categoryId) {
         try {
             Category category = categoryService.getCategoryById(categoryId);

@@ -21,7 +21,7 @@ import static org.springframework.http.HttpStatus.*;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("${api/prefix}/products")
+@RequestMapping("${api.prefix}/products")
 @EnableMethodSecurity(prePostEnabled = true)
 public class ProductController {
 
